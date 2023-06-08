@@ -1,6 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import InfoBox from "./component/InfoBox";
@@ -8,23 +8,32 @@ import { useDispatch, useSelector } from "react-redux";
 import { Col, Container, Row } from "react-bootstrap";
 
 function App() {
-  const [searchInfo, setSearchInfo] = useState('')
+  const [list, setList] = useState([]);
   const info = useSelector((state) => state.information);
-  const count = useSelector((state) => state.count);
+  const showinput = useSelector((state) => state.connet);
   const dispatch = useDispatch();
 
   const createuserInfo = (e) => {
     e.preventDefault();
-    dispatch({ type: "COUNT" });
     dispatch({
       type: "INFO",
       paylode: { name: e.target.name.value, number: e.target.number.value },
     });
   };
 
-  const search = () => {
-    setSearchInfo(searchInfo)
-  }
+
+
+  useEffect(() => {
+    if(showinput !== '') {
+      let list = info.filter(item => item.name.includes(showinput))
+      setList(list)
+    }else {
+      setList(info)
+      console.log(list)
+    }
+    
+  }, [showinput, info]);
+
   return (
     <div>
       <Container>
@@ -57,28 +66,26 @@ function App() {
           <Col lg={6} className="searchbox">
             <Row>
               <Col lg={10}>
-                <Form.Control type="text" placeholder="search" onChange={(e)=> setSearchInfo(e.target.value)}/>
+                <Form.Control
+                  type="text"
+                  placeholder="search"
+                  onChange={(e) =>
+                    dispatch({
+                      type: "SEARCH",
+                      paylode: { searchinfo: e.target.value },
+                    })
+                  }
+                />
               </Col>
               <Col lg={2}>
                 {" "}
-                <Button variant="primary" type="button" onClick={search}>
+                <Button variant="primary" type="button">
                   search
                 </Button>
               </Col>
             </Row>
-            num: {count}
-            {info.map((item) =>{
-              if(searchInfo === '') {
-                return <InfoBox item={item}/>
-                
-              }else if(item.name === searchInfo) {
-                return <InfoBox item={item}/>
-              }
-              return ''
-            }
-            )}
-            
- 
+            num: {list.length} 
+            {list.map((item) => <InfoBox item={item}/>)}
           </Col>
         </Row>
       </Container>

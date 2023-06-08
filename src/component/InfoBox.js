@@ -1,7 +1,7 @@
 import React from "react";
 import { Col, Row } from "react-bootstrap";
 
-const InfoBox = ({ item, searchInfo }) => {
+const InfoBox = ({ item }) => {
   return (
     <div className="repeatbox">
       <Row>
@@ -19,6 +19,7 @@ const InfoBox = ({ item, searchInfo }) => {
         </Col>
       </Row>
     </div>
+    // git test
   );
 };
 

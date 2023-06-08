@@ -1,6 +1,6 @@
 let initialState = {
   information: [],
-  count: 0,
+  connet: '',
 };
 
 function reducer(state = initialState, action) {
@@ -14,9 +14,8 @@ function reducer(state = initialState, action) {
           { name: paylode.name, number: paylode.number },
         ],
       };
-
-    case "COUNT":
-      return { ...state, count: state.count + 1 };
+    case "SEARCH":
+      return {...state, connet: paylode.searchinfo}
     default:
       return { ...state };
   }
